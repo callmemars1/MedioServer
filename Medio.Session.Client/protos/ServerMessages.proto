@@ -1,0 +1,33 @@
+﻿syntax = "proto3";
+
+package Medio.Messages;
+
+message MoveRequest {
+	string Id = 1;
+	Pos Pos = 2;
+}
+message Pos {
+	float X = 1;
+	float Y = 2;
+}
+message EntityUpdatedData {
+	int32 Points = 1;
+	Pos Pos = 2;
+	string Id = 3;
+}
+message PlayerData {
+	string Id = 1;
+	string Name = 2;
+	string Type = 3;
+	Color Color = 4;
+}
+message Color {
+	int32 R = 1;
+	int32 G = 2;
+	int32 B = 3;
+}
+message EntityData {
+	string Id = 1;
+	string Type = 2;
+	Color Color = 3;
+}
