@@ -1,20 +1,22 @@
-﻿using Medio.Network.ClientHandlers;
+﻿using CSharpVitamins;
+using Medio.Network.ClientHandlers;
 using Medio.Network.Clients;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 
 namespace Medio.Network.ClientPools;
 
 public class ClientPool
 {
-    protected ConcurrentDictionary<Guid, Client> _clients = new();
-    protected ConcurrentDictionary<Guid, ClientHandler> _handlers = new();
+    protected ConcurrentDictionary<ShortGuid, Client> _clients = new();
+    protected ConcurrentDictionary<ShortGuid, ClientHandler> _handlers = new();
     public ClientPool()
     {
 
     }
-    public virtual IReadOnlyDictionary<Guid, IReadOnlyClient> Clients
+    public virtual IReadOnlyDictionary<ShortGuid, IReadOnlyClient> Clients
     {
-        get => _clients.Select(p => KeyValuePair.Create<Guid, IReadOnlyClient>(p.Key, p.Value))
+        get => _clients.Select(p => KeyValuePair.Create<ShortGuid, IReadOnlyClient>(p.Key, p.Value))
                        .ToDictionary(p => p.Key, p => p.Value);
     }
     public virtual void AddClient(Client client, IClientHandlerCreator clientHandlerCreator)

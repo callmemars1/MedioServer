@@ -2,6 +2,7 @@
 
 package Medio.Messages;
 
+// id = 1
 message MoveRequest {
 	string Id = 1;
 	Pos Pos = 2;
@@ -10,7 +11,8 @@ message Pos {
 	float X = 1;
 	float Y = 2;
 }
-message EntityUpdatedData {
+// id = 2
+message EntityUpdatedState {
 	int32 Points = 1;
 	Pos Pos = 2;
 	string Id = 3;
@@ -30,4 +32,43 @@ message EntityData {
 	string Id = 1;
 	string Type = 2;
 	Color Color = 3;
+}
+// id = 3
+message SpawnRequest {
+	string Id = 1;
+}
+// id = 4
+message ConnectResponse {
+	string Id = 1;
+	string SessionId = 2;
+}
+// id = 5
+message SessionDataRequest {
+	string SessionId = 1;
+	string Id = 2;
+	PlayerData PlayerData = 3;
+}
+// id = 6
+message SessionDataResponse {
+	repeated EntityData entitiesData = 1;
+	repeated PlayerData playersData = 2;
+	repeated EntityUpdatedState lastActualStates = 3;
+	Rules Rules = 4;
+}
+message Rules {
+	float Speed = 1;
+    float SizeIncreaseCoefficient = 2;
+    int32 GameLength = 3;
+    int32 MaxPlayerSize = 4;
+    int32 MinPlayerSize = 5;
+    int32 MaxPlayerSpawnSize = 6;
+    int32 MinEntitySpawnSize = 7;
+    int32 MaxEntitySpawnSize = 8;
+    float CanEatSizeDifference = 9;
+    float MapWidth = 10;
+    float MapHeight = 11;
+    bool SpikesEnabled = 12;
+    int32 SpikesCount = 13;
+    int32 FoodCount = 14;
+    bool FoodEnabled = 15;
 }

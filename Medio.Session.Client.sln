@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Medio.Session.Client", "Medio.Session.Client\Medio.Session.Client.csproj", "{D70B30DD-FDA5-42F8-BD0A-57E58B2E4ED8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Medio.PvPSession", "Medio.Session.Client\Medio.PvPSession.csproj", "{D70B30DD-FDA5-42F8-BD0A-57E58B2E4ED8}"
 	ProjectSection(ProjectDependencies) = postProject
 		{78A75B55-237D-4600-AC31-5BBB2DE51219} = {78A75B55-237D-4600-AC31-5BBB2DE51219}
 		{142FEDB3-B891-47C2-9189-AF7532235F04} = {142FEDB3-B891-47C2-9189-AF7532235F04}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Medio.Network", "Medio.Network\Medio.Network.csproj", "{142FEDB3-B891-47C2-9189-AF7532235F04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Medio.Network", "Medio.Network\Medio.Network.csproj", "{142FEDB3-B891-47C2-9189-AF7532235F04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Medio.Domain", "Medio.Domain\Medio.Domain.csproj", "{78A75B55-237D-4600-AC31-5BBB2DE51219}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Medio.Domain", "Medio.Domain\Medio.Domain.csproj", "{78A75B55-237D-4600-AC31-5BBB2DE51219}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

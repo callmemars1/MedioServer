@@ -1,0 +1,8 @@
+{
+  "MoveRequest": 1,
+  "EntityUpdatedState": 2,
+  "SpawnRequest": 3,
+  "ConnectResponse": 4,
+  "SessionDataRequest": 5,
+  "SessionDataResponse": 6
+}

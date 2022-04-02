@@ -1,17 +1,16 @@
-﻿using Medio.Network.Clients;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using CSharpVitamins;
+using Medio.Messages;
+using Medio.Network.Clients;
+using Medio.Session.Client.Utilities;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Medio.Network.ClientAcceptors;
 
 public class MedioClientAcceptor : IClientAcceptor
 {
-    TcpListener _listener;
+    private readonly TcpListener _listener;
     public MedioClientAcceptor(IPEndPoint localAddress)
     {
         _listener = new(localAddress);
@@ -21,7 +20,14 @@ public class MedioClientAcceptor : IClientAcceptor
     public Client Accept()
     {
         var client = _listener.AcceptTcpClient();
-        return new MedioTcpClient(Guid.NewGuid(), client.Client.RemoteEndPoint as IPEndPoint, client);
+        var id = ShortGuid.NewGuid();
+        var response = new ConnectResponse 
+        {
+            Id = id,
+        };
+        client.GetStream().Write(new ByteArr(response).ToByteArray());
+        return new MedioTcpClient(id, client.Client.RemoteEndPoint as IPEndPoint
+                                                  ?? throw new ArgumentNullException("wtf"), client);
     }
 
     public void Start()

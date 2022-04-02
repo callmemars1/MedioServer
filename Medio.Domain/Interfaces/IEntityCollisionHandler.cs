@@ -6,7 +6,7 @@ namespace Medio.Domain.Interfaces;
 public interface IEntityCollisionHandler
 {
     public Pair<Type, Type> Types { get; }
-    public void Handle<TEntity, TCollider>(TEntity entity, TCollider collider)
+    public IEnumerable<IReadOnlyEntity> Handle<TEntity, TCollider>(TEntity entity, TCollider collider)
         where TEntity   : class, IReadOnlyEntity
         where TCollider : class, IReadOnlyEntity;
 }

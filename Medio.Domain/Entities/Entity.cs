@@ -6,6 +6,8 @@ namespace Medio.Domain.Entities;
 
 public abstract class Entity : IReadOnlyEntity
 {
+    protected int _points;
+    public int Points { get => _points; set => _points = value; }
     public Entity(ShortGuid id, string type)
     {
         Id = id;
@@ -16,4 +18,5 @@ public abstract class Entity : IReadOnlyEntity
     public Vector2D Pos { get; set; }
     public string Type { get; init; }
     public abstract float Radius { get; }
+    public Color Color { get; set; } = Color.White;
 }

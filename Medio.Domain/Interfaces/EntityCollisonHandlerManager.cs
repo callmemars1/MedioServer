@@ -7,13 +7,13 @@ namespace Medio.Domain.Interfaces;
 // Направляет запросы к хендлеру на обработку
 public class EntityCollisionHandlerManager
 {
-    private Dictionary<Pair<Type, Type>, IEntityCollisionHandler> _handlers = new();
-    public void Handle<TEntity, TCollider>(TEntity entity, TCollider collider)
+    private readonly Dictionary<Pair<Type, Type>, IEntityCollisionHandler> _handlers = new();
+    public IEnumerable<IReadOnlyEntity> Handle<TEntity, TCollider>(TEntity entity, TCollider collider)
         where TEntity   : class, IReadOnlyEntity
         where TCollider : class, IReadOnlyEntity
     {
-        var handler = GetHandler(entity.GetType(), collider.GetType()) ?? throw new ArgumentNullException("handler not exist!");
-        handler.Handle(entity, collider);
+        var handler = GetHandler(entity.GetType(), collider.GetType()) ?? throw new ArgumentNullException(null, "handler not exist!");
+        return handler.Handle(entity, collider);
     }
     private IEntityCollisionHandler? GetHandler(Type entityType, Type colliderType)
     {

@@ -10,12 +10,16 @@ public class Map
 {
     private readonly EntityCollisionHandlerManager _handlerManager;
     public Rules Rules { get; init; }
-    private ConcurrentDictionary<ShortGuid, Entity> _entities = new();
+    private readonly ConcurrentDictionary<ShortGuid, Entity> _entities = new();
     public IReadOnlyDictionary<ShortGuid, IReadOnlyEntity> Entities
     {
         get => _entities.Select(p => KeyValuePair.Create<ShortGuid, IReadOnlyEntity>(p.Key, p.Value))
                         .ToDictionary(p => p.Key, p => p.Value);
     }
+
+    public ConcurrentHashSet<ShortGuid> UpdatedEntities => _updatedEntities;
+
+    private readonly ConcurrentHashSet<ShortGuid> _updatedEntities = new();
     public Map(Rules rules, EntityCollisionHandlerManager handlerManager)
     {
         Rules = rules;
@@ -39,7 +43,7 @@ public class Map
     }
     public bool TryUpdateEnityPos(ShortGuid entityID, Vector2D pos)
     {
-        if (!_entities.ContainsKey(entityID))
+        if (_entities.ContainsKey(entityID) == false)
             throw new ArgumentException("no entity with this ID");
 
         if (IsInsideMap(pos) == false)
@@ -53,7 +57,11 @@ public class Map
         var collideEntities = _entities.Where((pair) => InEntityRange(pos, pair.Value));
         foreach (var collideEntityPair in collideEntities)
         {
-            _handlerManager.Handle(entity, collideEntityPair.Value);
+            var updated = _handlerManager.Handle(entity, collideEntityPair.Value);
+            foreach (var e in updated)
+            {
+                _updatedEntities.Add(e.Id);
+            }
         }
 
         return true;
@@ -65,14 +73,21 @@ public class Map
                && pos.X <= Rules.MapWidth
                && pos.Y <= Rules.MapHeight;
     }
-    public bool InEntityRange(Vector2D pos, IReadOnlyEntity entity)
+    public static bool InEntityRange(Vector2D pos, IReadOnlyEntity entity)
     {
         var range = Math.Sqrt(Math.Pow((entity.Pos.X - pos.X), 2) + Math.Pow((entity.Pos.Y - pos.Y), 2));
-        return entity.Radius < range;
+        return entity.Radius > range;
     }
     public bool CanMoveTo(IReadOnlyEntity entity, Vector2D pos)
     {
         var range = Math.Sqrt(Math.Pow((entity.Pos.X - pos.X), 2) + Math.Pow((entity.Pos.Y - pos.Y), 2));
         return Rules.Speed >= range;
+    }
+    public void ExplicitChangeEntityState(ShortGuid id, Entity entity)
+    {
+        if (_entities.ContainsKey(id) == false)
+            throw new ArgumentException("no entity with this ID!");
+
+        _entities[id] = entity;
     }
 }

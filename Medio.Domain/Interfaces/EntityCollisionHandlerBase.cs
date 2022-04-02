@@ -10,13 +10,13 @@ public abstract class EntityCollisionHandlerBase<T, U> : IEntityCollisionHandler
     where U : class, IReadOnlyEntity
 {
     public Pair<Type, Type> Types { get; } = new Pair<Type, Type>() { First = typeof(T), Second = typeof(U) };
-    public void Handle<TEntity, TCollider>(TEntity entity, TCollider collider)
+    public IEnumerable<IReadOnlyEntity> Handle<TEntity, TCollider>(TEntity entity, TCollider collider)
         where TEntity   : class, IReadOnlyEntity
         where TCollider : class, IReadOnlyEntity
     {
         T castedEntity = entity as T ?? throw new InvalidCastException("Entity type not matched");
         U castedCollider = collider as U ?? throw new InvalidCastException("Collider type not matched");
-        HandleCollision(castedEntity, castedCollider);
+        return HandleCollision(castedEntity, castedCollider);
     }
-    protected abstract void HandleCollision(T entity, U collider);
+    protected abstract IEnumerable<IReadOnlyEntity> HandleCollision(T entity, U collider);
 }

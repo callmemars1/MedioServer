@@ -9,4 +9,6 @@ public interface IReadOnlyEntity
     public Vector2D Pos { get; }
     public string Type { get; }
     public float Radius { get; }
+    public Color Color { get; }
+    public int Points { get; }
 }
