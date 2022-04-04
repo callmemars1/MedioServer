@@ -7,9 +7,9 @@ namespace Medio.PvPSession
 {
     public class MoveRequestHandler : MessageHandlerBase<MoveRequest>
     {
-        private readonly Map _map;
+        private readonly MapImpl _map;
 
-        public MoveRequestHandler(Map map)
+        public MoveRequestHandler(MapImpl map)
         {
             _map = map;
         }

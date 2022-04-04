@@ -17,6 +17,7 @@ public record Rules
     public int SpikesCount { get; init; }
     public int FoodCount { get; init; }
     public bool FoodEnabled { get; init; }
+    public int MaxEntities { get; init; } // summ for all entities.
 
     public static Rules GetDefaultPvPRules() 
     {
@@ -35,7 +36,8 @@ public record Rules
             SizeIncreaseCoefficient = 1.2f,
             GameLength = int.MaxValue,
             SpikesCount = 0,
-            FoodCount = 1000
+            FoodCount = 1000,
+            MaxEntities = 1000 + 16
         };
     }
 }

@@ -23,6 +23,7 @@ public class SessionDataRequestHandler : MessageHandlerBase<SessionDataRequest>
         if (_clientPool.Clients.ContainsKey(message.Id) == false)
             throw new InvalidRequestException(message, "no client with this id");
 
+        Console.WriteLine($"{message.PlayerData?.Name ?? "eblan"}");
         var reply = new SessionDataResponse() { Rules = _map.Rules.GetDtoRules()};
         foreach (var entityPair in _map.Entities)
         {
@@ -56,9 +57,9 @@ public class SessionDataRequestHandler : MessageHandlerBase<SessionDataRequest>
         _clientPool.Clients[message.Id].Send(new ByteArr(reply).ToByteArray());
         _map.AddEntity(new Player(message.Id, _map.Rules.SizeIncreaseCoefficient)
         {
-            Color = message.PlayerData.Color.FromDtoColor(),
+            Color = message.PlayerData.Color?.FromDtoColor() ?? Domain.Utilities.Color.Red,
             Name = message.PlayerData.Name,
-            Type = message.PlayerData.Type,
+            Type = message.PlayerData?.Type ?? "noname",
             Pos = new Domain.Utilities.Vector2D { X = -1, Y = -1 },
             Points = 0
         });

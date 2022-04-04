@@ -1,6 +1,8 @@
 ﻿using Medio.Network.Clients;
+using Medio.PvPSession.Exceptions;
 using Medio.Session.Client.MessageHandlers;
 using Medio.Session.Client.Utilities;
+using System.Net.Sockets;
 
 namespace Medio.Network.ClientHandlers;
 
@@ -29,6 +31,7 @@ public class MedioPvPClientHandler : ClientHandler
             while (token.IsCancellationRequested == false)
             {
                 var msgSizeBytes = _client.Receive(ByteArr.SizeBytesCount); // read size part of header
+                Console.WriteLine("received");
                 var msgSize = BitConverter.ToInt32(msgSizeBytes); // get int from readed bytes
                 var msgBytes = _client.Receive(msgSize - ByteArr.SizeBytesCount); // read full msg
                 // concat two readed arrays for right deserialize
@@ -45,6 +48,8 @@ public class MedioPvPClientHandler : ClientHandler
         {
             _handle = false;
             _client.Close();
+            StopHandle();
+            throw new ClientConnectionInterruptedException(_client, "beda");
         }
     }
 
@@ -52,5 +57,6 @@ public class MedioPvPClientHandler : ClientHandler
     {
         _handle = false;
         _ctSource.Cancel();
+        Console.WriteLine("handle stopped");
     }
 }

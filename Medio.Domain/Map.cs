@@ -1,93 +1,58 @@
-﻿using CSharpVitamins;
+﻿using System.Collections.Concurrent;
 using Medio.Domain.Entities;
-using Medio.Domain.Interfaces;
-using Medio.Domain.Utilities;
-using System.Collections.Concurrent;
+using CSharpVitamins;
 
 namespace Medio.Domain;
 
-public class Map
+/*
+ *  Контейнер для сущностей с привязкой к правилам
+ */
+
+public abstract class Map
 {
-    private readonly EntityCollisionHandlerManager _handlerManager;
-    public Rules Rules { get; init; }
-    private readonly ConcurrentDictionary<ShortGuid, Entity> _entities = new();
-    public IReadOnlyDictionary<ShortGuid, IReadOnlyEntity> Entities
+    protected delegate void EntityTryAddHandler(Map sender, Entity entity, bool tryResult);
+    protected delegate void EntityTryRemoveHandler(Map sender, ShortGuid entityId, bool tryResult);
+    protected event EntityTryAddHandler? OnTryAdd;
+    protected event EntityTryRemoveHandler? OnTryRemove;
+
+    protected readonly ConcurrentDictionary<ShortGuid, Entity> _entities = new();
+    private readonly Rules _rules;
+
+    public Map(Rules rules)
+    {
+        _rules = rules;
+    }
+
+    public virtual IReadOnlyDictionary<ShortGuid, IReadOnlyEntity> Entities
     {
         get => _entities.Select(p => KeyValuePair.Create<ShortGuid, IReadOnlyEntity>(p.Key, p.Value))
                         .ToDictionary(p => p.Key, p => p.Value);
     }
 
-    public ConcurrentHashSet<ShortGuid> UpdatedEntities => _updatedEntities;
+    public Rules Rules { get => _rules; }
 
-    private readonly ConcurrentHashSet<ShortGuid> _updatedEntities = new();
-    public Map(Rules rules, EntityCollisionHandlerManager handlerManager)
+    public virtual bool TryAddEntity(Entity entity)
     {
-        Rules = rules;
-        _handlerManager = handlerManager;
-    }
-
-    public void AddEntity(Entity entity)
-    {
-        if (_entities.ContainsKey(entity.Id))
-            throw new ArgumentException("entite already in collection");
-
-        _entities[entity.Id] = entity;
-    }
-    public bool TryRemoveEntity(ShortGuid id)
-    {
-        if (_entities.ContainsKey(id) == false)
-            return false;
-
-        _entities.TryRemove(id, out _);
-        return true;
-    }
-    public bool TryUpdateEnityPos(ShortGuid entityID, Vector2D pos)
-    {
-        if (_entities.ContainsKey(entityID) == false)
-            throw new ArgumentException("no entity with this ID");
-
-        if (IsInsideMap(pos) == false)
-            return false;
-
-        var entity = _entities[entityID];
-        if (CanMoveTo(entity, pos) == false)
-            return false;
-
-        entity.Pos = pos;
-        var collideEntities = _entities.Where((pair) => InEntityRange(pos, pair.Value));
-        foreach (var collideEntityPair in collideEntities)
+        if (_entities.ContainsKey(entity.Id) || _entities.Count == _rules.MaxEntities)
         {
-            var updated = _handlerManager.Handle(entity, collideEntityPair.Value);
-            foreach (var e in updated)
-            {
-                _updatedEntities.Add(e.Id);
-            }
+            OnTryAdd?.Invoke(this, entity, false);
+            return false;
         }
 
+        _entities[entity.Id] = entity;
+        OnTryAdd?.Invoke(this, entity, true);
         return true;
     }
-    public bool IsInsideMap(Vector2D pos)
-    {
-        return pos.X >= 0
-               && pos.Y >= 0
-               && pos.X <= Rules.MapWidth
-               && pos.Y <= Rules.MapHeight;
-    }
-    public static bool InEntityRange(Vector2D pos, IReadOnlyEntity entity)
-    {
-        var range = Math.Sqrt(Math.Pow((entity.Pos.X - pos.X), 2) + Math.Pow((entity.Pos.Y - pos.Y), 2));
-        return entity.Radius > range;
-    }
-    public bool CanMoveTo(IReadOnlyEntity entity, Vector2D pos)
-    {
-        var range = Math.Sqrt(Math.Pow((entity.Pos.X - pos.X), 2) + Math.Pow((entity.Pos.Y - pos.Y), 2));
-        return Rules.Speed >= range;
-    }
-    public void ExplicitChangeEntityState(ShortGuid id, Entity entity)
-    {
-        if (_entities.ContainsKey(id) == false)
-            throw new ArgumentException("no entity with this ID!");
 
-        _entities[id] = entity;
+    public virtual bool TryRemoveEntity(ShortGuid id)
+    {
+        var result = _entities.TryRemove(id, out _);
+        OnTryRemove?.Invoke(this, id, result);
+        return result;
     }
+
+    // Проверят возможность изменения состояния
+    public abstract void UpdateEntityState(ShortGuid entityId, Entity newState);
+    // Ничего не проверяет
+    public abstract void ExplicitUpdateEntityState(ShortGuid entityId, Entity newState);
 }

@@ -13,7 +13,7 @@ using Medio.Session.Client.MessageHandlers;
 using Medio.Session.Client.Utilities;
 using System.Net;
 
-IPEndPoint localAddr = new IPEndPoint(IPAddress.Parse("192.168.0.104"), 5000);
+IPEndPoint localAddr = new IPEndPoint(IPAddress.Parse("192.168.110.70"), 5000);
 
 var coolHandlerManager = new EntityCollisionHandlerManager();
 var map = new Map(Medio.Domain.Rules.GetDefaultPvPRules(),coolHandlerManager);
@@ -36,11 +36,12 @@ var task = Task.Run(() =>
     while (accepting)
     {
         var client = acceptor.Accept();
+        // accepted
         pool.AddClient(client, clientHandlerCreator);
     }
     acceptor.Stop();
 });
-Timer timer = new(Callback,null,0,100);
+//Timer timer = new(Callback,null,0,100);
 Console.ReadKey();
 accepting = false;
 task.Wait();
@@ -65,8 +66,8 @@ void Callback(object o)
 
 class PlayerAndFoodCollisionHandler : EntityCollisionHandlerBase<Player, Food>
 {
-    private readonly Map _map;
-    public PlayerAndFoodCollisionHandler(Map map)
+    private readonly MapImpl _map;
+    public PlayerAndFoodCollisionHandler(MapImpl map)
     {
         _map = map;
     }

@@ -1,12 +1,15 @@
 ﻿namespace Medio.Domain.Utilities;
 
-public record struct Pair<T,U>
+public record class Pair<T, U>
 {
-    public Pair(T first,U second)
+    private T _first;
+    private U _second;
+
+    public Pair(T first, U second)
     {
-        First = first;
-        Second = second;
+        _first = first;
+        _second = second;
     }
-    public T First { get; set; }
-    public U Second { get; set; }
+    public ref T First { get => ref _first; }
+    public ref U Second { get => ref _second; }
 }

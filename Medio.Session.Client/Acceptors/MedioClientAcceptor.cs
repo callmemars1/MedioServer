@@ -20,6 +20,7 @@ public class MedioClientAcceptor : IClientAcceptor
     public Client Accept()
     {
         var client = _listener.AcceptTcpClient();
+        Console.WriteLine("accepted");
         var id = ShortGuid.NewGuid();
         var response = new ConnectResponse 
         {
@@ -35,6 +36,7 @@ public class MedioClientAcceptor : IClientAcceptor
         if (Accepting)
             return;
 
+        Console.WriteLine("started");
         _listener.Start();
         Accepting = true;
     }
@@ -44,6 +46,7 @@ public class MedioClientAcceptor : IClientAcceptor
         if (Accepting == false)
             return;
 
+        Console.WriteLine("stopped");
         _listener.Stop();
         Accepting = false;
     }

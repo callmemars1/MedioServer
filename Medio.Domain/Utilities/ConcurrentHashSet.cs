@@ -7,7 +7,6 @@ public class ConcurrentHashSet<T> : IDisposable, IEnumerable<T>
     private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
     private readonly HashSet<T> _hashSet = new HashSet<T>();
 
-    #region Implementation of ICollection<T> ...ish
     public bool Add(T item)
     {
         _lock.EnterWriteLock();
@@ -75,9 +74,7 @@ public class ConcurrentHashSet<T> : IDisposable, IEnumerable<T>
             }
         }
     }
-    #endregion
 
-    #region Dispose
     public void Dispose()
     {
         Dispose(true);
@@ -104,5 +101,4 @@ public class ConcurrentHashSet<T> : IDisposable, IEnumerable<T>
     {
         Dispose(false);
     }
-    #endregion
 }

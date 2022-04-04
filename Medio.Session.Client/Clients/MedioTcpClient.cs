@@ -1,4 +1,5 @@
 ﻿using CSharpVitamins;
+using Medio.PvPSession.Exceptions;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
@@ -17,6 +18,7 @@ public class MedioTcpClient : Client
             throw new ArgumentException("Client should be connected!");
 
         _client = client;
+        _client.ReceiveTimeout = 60000;
     }
 
     public override bool Connected => _client.Connected;
@@ -40,6 +42,9 @@ public class MedioTcpClient : Client
             var bytes = stream.Read(buffer, 0, readSize);
             msg.AddRange(buffer.Take(bytes));
         }
+        if (_client.Connected == false)
+            throw new ClientConnectionInterruptedException(this, "AAAAAAAAAAAAAa");
+
         var span = CollectionsMarshal.AsSpan(msg);
         return span;
     }

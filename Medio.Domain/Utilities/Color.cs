@@ -5,18 +5,21 @@ public record struct Color
     public byte R { get; set; }
     public byte G { get; set; }
     public byte B { get; set; }
+}
 
-    public static Color White 
+public static class Colors 
+{
+    public static Color White
     {
-        get 
-        { 
-            return new Color 
-            { 
-                R = 255, 
+        get
+        {
+            return new Color
+            {
+                R = 255,
                 G = 255,
                 B = 255,
-            }; 
-        } 
+            };
+        }
     }
     public static Color Green
     {

@@ -27,7 +27,17 @@ public class ClientPool
         _clients.TryAdd(client.Id, client);
         var handler = clientHandlerCreator.Create(client);
         _handlers.TryAdd(client.Id, handler);
-        Task.Run(() => handler.StartHandle());
+        Task.Run(() =>
+        {
+            try
+            {
+                handler.StartHandle();
+            }
+            catch (Exception ex) 
+            {
+                RemoveClient(client.Id);
+            }
+        });
         Console.WriteLine("added " + client?.Id);
     }
     public virtual void RemoveClient(Guid id)

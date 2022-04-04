@@ -9,9 +9,9 @@ namespace Medio.PvPSession.MessageHandlers;
 
 public class SpawnRequestHandler : MessageHandlerBase<SpawnRequest>
 {
-    private readonly Map _map;
+    private readonly MapImpl _map;
 
-    public SpawnRequestHandler(Map map)
+    public SpawnRequestHandler(MapImpl map)
     {
         _map = map;
     }

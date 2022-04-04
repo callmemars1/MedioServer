@@ -72,3 +72,7 @@ message Rules {
     int32 FoodCount = 14;
     bool FoodEnabled = 15;
 }
+// id = 7
+message HeartBeatMessage {
+	// empty
+}

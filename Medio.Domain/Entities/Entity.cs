@@ -1,22 +1,32 @@
-﻿using CSharpVitamins;
-using Medio.Domain.Interfaces;
-using Medio.Domain.Utilities;
+﻿using Medio.Domain.Utilities;
+
+using CSharpVitamins;
 
 namespace Medio.Domain.Entities;
 
+/*
+ *  Путем достаточно долгих размышлений был сделан вывод, что
+ *  в данной игре не будет реализаций сложный форм для игровых сущнсотей,
+ *  только круги.
+ *  
+ *  Id      -   У каждой сущности есть идентификатор, который однозначно определяет ее на карте
+ *  Pos     -   У каждой сущности есть позиция (возврат по ссылке для удобства)
+ *  Radius  -   У каждой сущности есть радиус
+ */
+
 public abstract class Entity : IReadOnlyEntity
 {
-    protected int _points;
-    public int Points { get => _points; set => _points = value; }
-    public Entity(ShortGuid id, string type)
+    private Vector2D _pos;
+
+    public Entity(ShortGuid id)
     {
         Id = id;
-        Type = type;
     }
 
     public ShortGuid Id { get; init; }
-    public Vector2D Pos { get; set; }
-    public string Type { get; init; }
+
+    public ref Vector2D Pos { get => ref _pos; }
+
     public abstract float Radius { get; }
-    public Color Color { get; set; } = Color.White;
+
 }
