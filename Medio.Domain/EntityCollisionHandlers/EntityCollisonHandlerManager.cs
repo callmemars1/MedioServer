@@ -26,7 +26,7 @@ public class EntityCollisionHandlerManager
 
     private IEntityCollisionHandler GetHandler(Type entityType, Type colliderType)
     {
-        var key = new Pair<Type, Type>(entityType, colliderType );
+        var key = new Pair<Type, Type>(entityType, colliderType);
         // check for explicit match
         if (_handlers.ContainsKey(key))
             return _handlers[key];

@@ -7,6 +7,7 @@ namespace Medio.Domain.EntityCollisionHandlers;
  * Базовый класс для всех хендлеров.
  * Позволяет на этапе написания класса явно определить типы, с которыми будет работать хендлер
  */
+
 public abstract class EntityCollisionHandlerBase<T, U> : IEntityCollisionHandler
     where T : class, IReadOnlyEntity
     where U : class, IReadOnlyEntity
