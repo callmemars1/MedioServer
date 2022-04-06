@@ -12,10 +12,10 @@ public abstract class EntityCollisionHandlerBase<T, U> : IEntityCollisionHandler
     where T : class, IReadOnlyEntity
     where U : class, IReadOnlyEntity
 {
-    public Pair<Type, Type> Types { get; } = new Pair<Type, Type>() { First = typeof(T), Second = typeof(U) };
+    public Pair<Type, Type> Types { get; } = new Pair<Type, Type>(typeof(T), typeof(U));
 
     public void Handle<TEntity, TCollider>(TEntity entity, TCollider collider)
-        where TEntity   : class, IReadOnlyEntity
+        where TEntity : class, IReadOnlyEntity
         where TCollider : class, IReadOnlyEntity
     {
         T castedEntity = entity as T ?? throw new InvalidCastException("Entity type not matched");

@@ -1,8 +1,7 @@
 ﻿using Medio.Network.Clients;
+using Medio.Proto;
 using Medio.PvPSession.Exceptions;
 using Medio.Session.Client.MessageHandlers;
-using Medio.Session.Client.Utilities;
-using System.Net.Sockets;
 
 namespace Medio.Network.ClientHandlers;
 
@@ -16,6 +15,8 @@ public class MedioPvPClientHandler : ClientHandler
         _handlerManager = handlerManager;
     }
 
+    public override bool Active { get; protected set; }
+
     public override void StartHandle()
     {
         try
@@ -23,17 +24,16 @@ public class MedioPvPClientHandler : ClientHandler
             if (_handle == true)
                 return;
 
-            if (_client.Connected == false)
+            if (Client.Connected == false)
                 throw new ArgumentException("client not connected");
 
             var token = _ctSource.Token;
             _handle = true;
             while (token.IsCancellationRequested == false)
             {
-                var msgSizeBytes = _client.Receive(ByteArr.SizeBytesCount); // read size part of header
-                Console.WriteLine("received");
+                var msgSizeBytes = Client.Receive(ByteArr.SizeBytesCount); // read size part of header
                 var msgSize = BitConverter.ToInt32(msgSizeBytes); // get int from readed bytes
-                var msgBytes = _client.Receive(msgSize - ByteArr.SizeBytesCount); // read full msg
+                var msgBytes = Client.Receive(msgSize - ByteArr.SizeBytesCount); // read full msg
                 // concat two readed arrays for right deserialize
                 var fullMsgBytes = new byte[msgSize];
                 msgSizeBytes.CopyTo(fullMsgBytes.AsSpan(0, ByteArr.SizeBytesCount));
@@ -47,9 +47,9 @@ public class MedioPvPClientHandler : ClientHandler
         catch (Exception)
         {
             _handle = false;
-            _client.Close();
+            Client.Close();
             StopHandle();
-            throw new ClientConnectionInterruptedException(_client, "beda");
+            throw new ClientConnectionInterruptedException(Client, "beda");
         }
     }
 
@@ -57,6 +57,5 @@ public class MedioPvPClientHandler : ClientHandler
     {
         _handle = false;
         _ctSource.Cancel();
-        Console.WriteLine("handle stopped");
     }
 }

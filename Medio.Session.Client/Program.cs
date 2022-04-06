@@ -1,9 +1,8 @@
-﻿using Medio.Domain;
+﻿/*using Medio.Domain;
 using Medio.Domain.Entities;
-using Medio.Domain.Interfaces;
+using Medio.Domain.EntityCollisionHandlers;
 using Medio.Messages;
 using Medio.Network.ClientAcceptors;
-using Medio.Network.ClientHandlers;
 using Medio.Network.ClientPools;
 using Medio.PvPSession;
 using Medio.PvPSession.ClientHandlers;
@@ -16,7 +15,7 @@ using System.Net;
 IPEndPoint localAddr = new IPEndPoint(IPAddress.Parse("192.168.110.70"), 5000);
 
 var coolHandlerManager = new EntityCollisionHandlerManager();
-var map = new Map(Medio.Domain.Rules.GetDefaultPvPRules(),coolHandlerManager);
+var map = new Map(Medio.Domain.Rules.GetDefaultPvPRules(), coolHandlerManager);
 coolHandlerManager.RegisterHandler(new PlayerAndFoodCollisionHandler(map));
 
 var acceptor = new MedioClientAcceptor(localAddr);
@@ -24,7 +23,7 @@ var pool = new ClientPool();
 var messageHandlerManager = new MessageHandlerManager();
 var moveRequestHandler = new MoveRequestHandler(map);
 var spawnRequestHandler = new SpawnRequestHandler(map);
-var sessionDataRequestHandler = new SessionDataRequestHandler(pool,map);
+var sessionDataRequestHandler = new SessionDataRequestHandler(pool, map);
 var clientHandlerCreator = new MedioPvPClientHandlerCreator(messageHandlerManager);
 messageHandlerManager.RegisterHandler(MessageTypeIdManager.GetMessageTypeId<MoveRequest>(), moveRequestHandler);
 messageHandlerManager.RegisterHandler(MessageTypeIdManager.GetMessageTypeId<SpawnRequest>(), spawnRequestHandler);
@@ -46,10 +45,10 @@ Console.ReadKey();
 accepting = false;
 task.Wait();
 
-void Callback(object o) 
+void Callback(object o)
 {
     var entities = map.Entities;
-    foreach (var id in map.UpdatedEntities) 
+    foreach (var id in map.UpdatedEntities)
     {
         var updated = new EntityUpdatedState()
         {
@@ -57,7 +56,7 @@ void Callback(object o)
             Pos = entities[id].Pos.GetDtoPos(),
             Points = entities[id].Points
         };
-        foreach(var client in pool.Clients)
+        foreach (var client in pool.Clients)
             client.Value.Send(new ByteArr(updated).ToByteArray());
     }
     map.UpdatedEntities.Clear();
@@ -80,4 +79,4 @@ class PlayerAndFoodCollisionHandler : EntityCollisionHandlerBase<Player, Food>
         collider.Points = 0;
         return new List<IReadOnlyEntity> { entity, collider };
     }
-}
+}*/

@@ -1,6 +1,6 @@
 ﻿using Google.Protobuf;
 
-namespace Medio.Session.Client.Utilities;
+namespace Medio.Proto;
 
 public class ByteArr
 {
@@ -22,7 +22,6 @@ public class ByteArr
         Data = new Span<byte>(data, HeaderBytesCount, data.Length - HeaderBytesCount).ToArray();
         Size = data.Length;
     }
-
     public byte[] ToByteArray()
     {
         List<byte> bytes = new();

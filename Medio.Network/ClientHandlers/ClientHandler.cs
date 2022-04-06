@@ -4,11 +4,13 @@ namespace Medio.Network.ClientHandlers;
 
 public abstract class ClientHandler
 {
-    protected Client _client;
+    private readonly Client _client;
     public ClientHandler(Client client)
     {
         _client = client;
     }
+    public Client Client { get => _client; }
+    public abstract bool Active { get; protected set; }
     public abstract void StartHandle();
     public abstract void StopHandle();
 }

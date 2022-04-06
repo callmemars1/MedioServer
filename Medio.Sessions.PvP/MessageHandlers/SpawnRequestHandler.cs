@@ -9,9 +9,9 @@ namespace Medio.PvPSession.MessageHandlers;
 
 public class SpawnRequestHandler : MessageHandlerBase<SpawnRequest>
 {
-    private readonly MapImpl _map;
+    private readonly Map _map;
 
-    public SpawnRequestHandler(MapImpl map)
+    public SpawnRequestHandler(Map map)
     {
         _map = map;
     }
@@ -28,10 +28,10 @@ public class SpawnRequestHandler : MessageHandlerBase<SpawnRequest>
         {
             Color = previousStateEntity.Color,
             Name = previousStateEntity.Name,
-            Pos = MapGenerator.GeneratePos(_map.Rules),
-            Points = MapGenerator.GeneratePointsForPlayer(_map.Rules),
+            //Pos = MapGenerator.GeneratePos(_map.Rules),
+            //Points = MapGenerator.GeneratePointsForPlayer(_map.Rules),
             SizeIncreaseCoefficient = previousStateEntity.SizeIncreaseCoefficient
         };
-        _map.ExplicitChangeEntityState(entity.Id, entity);
+        //_map.ExplicitChangeEntityState(entity.Id, entity);
     }
 }

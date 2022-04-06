@@ -3,9 +3,9 @@ using Medio.Domain.Entities;
 using Medio.Messages;
 using Medio.Network.ClientPools;
 using Medio.Network.MessageHandlers;
+using Medio.Proto;
 using Medio.PvPSession.Exceptions;
 using Medio.PvPSession.Utilities;
-using Medio.Session.Client.Utilities;
 
 namespace Medio.PvPSession.MessageHandlers;
 
@@ -23,9 +23,8 @@ public class SessionDataRequestHandler : MessageHandlerBase<SessionDataRequest>
         if (_clientPool.Clients.ContainsKey(message.Id) == false)
             throw new InvalidRequestException(message, "no client with this id");
 
-        Console.WriteLine($"{message.PlayerData?.Name ?? "eblan"}");
         var reply = new SessionDataResponse() { Rules = _map.Rules.GetDtoRules()};
-        foreach (var entityPair in _map.Entities)
+ /*       foreach (var entityPair in _map.Entities)
         {
             if (entityPair.Value is Player pl)
             {
@@ -34,7 +33,6 @@ public class SessionDataRequestHandler : MessageHandlerBase<SessionDataRequest>
                     Color = pl.Color.GetDtoColor(),
                     Id = pl.Id,
                     Name = pl.Name,
-                    Type = pl.Type,
                 });
             }
             else
@@ -52,16 +50,16 @@ public class SessionDataRequestHandler : MessageHandlerBase<SessionDataRequest>
                 // извиняюсь за это....................
                 Points = entityPair.Value.Points,
                 Pos = entityPair.Value.Pos.GetDtoPos(),
-            }) ;
-        }
+            }) ;*/
+      /*  }
         _clientPool.Clients[message.Id].Send(new ByteArr(reply).ToByteArray());
-        _map.AddEntity(new Player(message.Id, _map.Rules.SizeIncreaseCoefficient)
+        _map.TryAddEntity(new Player(message.Id, _map.Rules.SizeIncreaseCoefficient)
         {
             Color = message.PlayerData.Color?.FromDtoColor() ?? Domain.Utilities.Color.Red,
             Name = message.PlayerData.Name,
-            Type = message.PlayerData?.Type ?? "noname",
+            //Type = message.PlayerData?.Type ?? "noname",
             Pos = new Domain.Utilities.Vector2D { X = -1, Y = -1 },
             Points = 0
-        });
+        });*/
     }
 }

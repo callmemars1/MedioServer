@@ -1,14 +1,9 @@
 ﻿using Medio.Domain.Utilities;
 using Medio.Messages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Medio.PvPSession.Utilities
 {
-    public static class ClassToDTOExtension
+    public static class MappingExtension
     {
         public static Medio.Messages.Rules GetDtoRules(this Medio.Domain.Rules rules)
         {

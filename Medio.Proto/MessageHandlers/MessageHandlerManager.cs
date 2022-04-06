@@ -1,5 +1,5 @@
 ﻿using Medio.Network.MessageHandlers;
-using Medio.Session.Client.Utilities;
+using Medio.Proto;
 
 namespace Medio.Session.Client.MessageHandlers;
 

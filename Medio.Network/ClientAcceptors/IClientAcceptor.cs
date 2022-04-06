@@ -2,6 +2,11 @@
 
 namespace Medio.Network.ClientAcceptors;
 
+
+
+/*    
+ * ClientAcceptor'ы отвечают за обработку входящих соединений
+*/
 public interface IClientAcceptor
 {
     public Client Accept();

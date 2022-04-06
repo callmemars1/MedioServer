@@ -6,14 +6,14 @@ namespace Medio.PvPSession.ClientHandlers;
 
 public class MedioPvPClientHandlerCreator : IClientHandlerCreator
 {
-    private readonly MessageHandlerManager messageHandlerManager;
+    private readonly MessageHandlerManager _messageHandlerManager;
 
     public MedioPvPClientHandlerCreator(MessageHandlerManager messageHandlerManager)
     {
-        this.messageHandlerManager = messageHandlerManager;
+        _messageHandlerManager = messageHandlerManager;
     }
     public ClientHandler Create(Client client)
     {
-        return new MedioPvPClientHandler(client, messageHandlerManager);
+        return new MedioPvPClientHandler(client, _messageHandlerManager);
     }
 }

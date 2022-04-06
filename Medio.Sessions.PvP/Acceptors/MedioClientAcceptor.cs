@@ -1,12 +1,11 @@
-﻿using CSharpVitamins;
-using Medio.Messages;
-using Medio.Network.Clients;
-using Medio.Session.Client.Utilities;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Text;
+using Medio.Network.Clients;
+using CSharpVitamins;
+using Medio.Network.ClientAcceptors;
+using Medio.Proto;
 
-namespace Medio.Network.ClientAcceptors;
+namespace Medio.Sessions.Pvp.Acceptors;
 
 public class MedioClientAcceptor : IClientAcceptor
 {
@@ -20,13 +19,8 @@ public class MedioClientAcceptor : IClientAcceptor
     public Client Accept()
     {
         var client = _listener.AcceptTcpClient();
-        Console.WriteLine("accepted");
         var id = ShortGuid.NewGuid();
-        var response = new ConnectResponse 
-        {
-            Id = id,
-        };
-        client.GetStream().Write(new ByteArr(response).ToByteArray());
+        // тут был возврат id клиенту
         return new MedioTcpClient(id, client.Client.RemoteEndPoint as IPEndPoint
                                                   ?? throw new ArgumentNullException("wtf"), client);
     }
@@ -36,7 +30,6 @@ public class MedioClientAcceptor : IClientAcceptor
         if (Accepting)
             return;
 
-        Console.WriteLine("started");
         _listener.Start();
         Accepting = true;
     }
@@ -46,7 +39,6 @@ public class MedioClientAcceptor : IClientAcceptor
         if (Accepting == false)
             return;
 
-        Console.WriteLine("stopped");
         _listener.Stop();
         Accepting = false;
     }

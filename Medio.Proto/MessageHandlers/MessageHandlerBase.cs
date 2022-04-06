@@ -1,5 +1,5 @@
 ﻿using Google.Protobuf;
-using Medio.Session.Client.Utilities;
+using Medio.Proto;
 
 namespace Medio.Network.MessageHandlers;
 
