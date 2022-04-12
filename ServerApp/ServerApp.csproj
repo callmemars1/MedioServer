@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
+    <PackageReference Include="NLog" Version="4.7.15" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Medio.Sessions.PvP\Medio.Sessions.PvP.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="NLogDebug.Config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

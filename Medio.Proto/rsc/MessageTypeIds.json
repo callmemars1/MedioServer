@@ -4,5 +4,6 @@
   "SpawnRequest": 3,
   "ConnectResponse": 4,
   "SessionDataRequest": 5,
-  "SessionDataResponse": 6
+  "SessionDataResponse": 6,
+  "HeartBeatMessage": 7
 }

@@ -1,6 +1,6 @@
 ﻿using Google.Protobuf;
 
-namespace Medio.PvPSession.Exceptions;
+namespace Medio.Proto.Exceptions;
 
 public class InvalidRequestException : Exception
 {

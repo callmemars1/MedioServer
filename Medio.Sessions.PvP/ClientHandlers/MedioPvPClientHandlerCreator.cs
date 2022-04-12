@@ -1,8 +1,9 @@
 ﻿using Medio.Network.ClientHandlers;
 using Medio.Network.Clients;
-using Medio.Session.Client.MessageHandlers;
+using Medio.Proto.MessageHandlers;
+using System.Collections.Concurrent;
 
-namespace Medio.PvPSession.ClientHandlers;
+namespace Medio.Sessions.PvP.ClientHandlers;
 
 public class MedioPvPClientHandlerCreator : IClientHandlerCreator
 {

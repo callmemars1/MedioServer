@@ -1,7 +1,7 @@
 ﻿using Google.Protobuf;
-using Medio.Proto;
+using Medio.Network.MessageHandlers;
 
-namespace Medio.Network.MessageHandlers;
+namespace Medio.Proto.MessageHandlers;
 
 public abstract class MessageHandlerBase<T> : IMessageHandler
     where T : IMessage<T>, new()

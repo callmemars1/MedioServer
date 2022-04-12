@@ -56,3 +56,4 @@ public abstract class Map
     // Ничего не проверяет
     public abstract void ExplicitUpdateEntityState(ShortGuid entityId, Entity newState);
 }
+        

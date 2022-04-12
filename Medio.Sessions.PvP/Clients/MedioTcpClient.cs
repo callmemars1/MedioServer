@@ -1,10 +1,11 @@
 ﻿using CSharpVitamins;
-using Medio.PvPSession.Exceptions;
+using Medio.Network.Clients;
+using Medio.Network.Exceptions;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 
-namespace Medio.Network.Clients;
+namespace Medio.Sessions.PvP.Clients;
 
 public class MedioTcpClient : Client
 {
@@ -35,15 +36,16 @@ public class MedioTcpClient : Client
     {
         List<byte> msg = new List<byte>();
         var stream = _client.GetStream();
+        var defaultBufferSize = 256;
         while (msg.Count < size)
         {
-            var readSize = size >= msg.Count + 256 ? 256 : size - msg.Count;
+            var readSize = size >= msg.Count + defaultBufferSize ? defaultBufferSize : size - msg.Count;
             var buffer = new byte[readSize];
             var bytes = stream.Read(buffer, 0, readSize);
             msg.AddRange(buffer.Take(bytes));
         }
         if (_client.Connected == false)
-            throw new ClientConnectionInterruptedException(this, "AAAAAAAAAAAAAa");
+            throw new ClientConnectionInterruptedException(this, "Client not connected");
 
         var span = CollectionsMarshal.AsSpan(msg);
         return span;

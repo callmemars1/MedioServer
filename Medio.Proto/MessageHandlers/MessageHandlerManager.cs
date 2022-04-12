@@ -1,7 +1,7 @@
 ﻿using Medio.Network.MessageHandlers;
 using Medio.Proto;
 
-namespace Medio.Session.Client.MessageHandlers;
+namespace Medio.Proto.MessageHandlers;
 
 public class MessageHandlerManager
 {

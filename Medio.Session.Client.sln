@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Medio.Network", "Medio.Netw
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Medio.Domain", "Medio.Domain\Medio.Domain.csproj", "{78A75B55-237D-4600-AC31-5BBB2DE51219}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Medio.Proto", "Medio.Proto\Medio.Proto.csproj", "{14FE17AF-280F-45DA-9A55-151A2BA95037}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Medio.Proto", "Medio.Proto\Medio.Proto.csproj", "{14FE17AF-280F-45DA-9A55-151A2BA95037}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Medio.Sessions.PvP", "Medio.Sessions.PvP\Medio.Sessions.PvP.csproj", "{F231EB08-299A-4B66-B5D9-B5725281EE5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Medio.Sessions.PvP", "Medio.Sessions.PvP\Medio.Sessions.PvP.csproj", "{F231EB08-299A-4B66-B5D9-B5725281EE5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerApp", "ServerApp\ServerApp.csproj", "{133F579F-AA68-45D2-B80F-4D1EA85E7321}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{F231EB08-299A-4B66-B5D9-B5725281EE5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F231EB08-299A-4B66-B5D9-B5725281EE5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F231EB08-299A-4B66-B5D9-B5725281EE5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{133F579F-AA68-45D2-B80F-4D1EA85E7321}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{133F579F-AA68-45D2-B80F-4D1EA85E7321}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{133F579F-AA68-45D2-B80F-4D1EA85E7321}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{133F579F-AA68-45D2-B80F-4D1EA85E7321}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

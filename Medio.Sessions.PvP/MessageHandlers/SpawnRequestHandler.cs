@@ -1,11 +1,11 @@
 ﻿using Medio.Domain;
 using Medio.Domain.Entities;
 using Medio.Domain.Utilities;
-using Medio.Messages;
-using Medio.Network.MessageHandlers;
-using Medio.PvPSession.Exceptions;
+using Medio.Proto.Exceptions;
+using Medio.Proto.MessageHandlers;
+using Medio.Proto.Messages;
 
-namespace Medio.PvPSession.MessageHandlers;
+namespace Medio.Sessions.PvP.MessageHandlers;
 
 public class SpawnRequestHandler : MessageHandlerBase<SpawnRequest>
 {
@@ -15,6 +15,7 @@ public class SpawnRequestHandler : MessageHandlerBase<SpawnRequest>
     {
         _map = map;
     }
+
     protected override void Process(SpawnRequest message)
     {
         if (_map.Entities.ContainsKey(message.Id) == false)
@@ -28,10 +29,15 @@ public class SpawnRequestHandler : MessageHandlerBase<SpawnRequest>
         {
             Color = previousStateEntity.Color,
             Name = previousStateEntity.Name,
-            //Pos = MapGenerator.GeneratePos(_map.Rules),
-            //Points = MapGenerator.GeneratePointsForPlayer(_map.Rules),
             SizeIncreaseCoefficient = previousStateEntity.SizeIncreaseCoefficient
         };
-        //_map.ExplicitChangeEntityState(entity.Id, entity);
+        var rnd = new Random();
+        entity.Pos = new()
+        {
+            X = rnd.Next(0, (int)_map.Rules.MapWidth * 100) / 100,
+            Y = rnd.Next(0, (int)_map.Rules.MapHeight * 100) / 100
+        };
+        entity.Points = rnd.Next(_map.Rules.MinPlayerSize, _map.Rules.MaxPlayerSpawnSize);
+        _map.ExplicitUpdateEntityState(entity.Id, entity);
     }
 }

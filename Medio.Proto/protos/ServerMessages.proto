@@ -1,6 +1,6 @@
 ﻿syntax = "proto3";
 
-package Medio.Messages;
+package Medio.Proto.Messages;
 
 // id = 1
 message MoveRequest {
@@ -20,18 +20,16 @@ message EntityUpdatedState {
 message PlayerData {
 	string Id = 1;
 	string Name = 2;
-	string Type = 3;
 	Color Color = 4;
+}
+message FoodData {
+	string Id = 1;
+	Color Color = 2;
 }
 message Color {
 	int32 R = 1;
 	int32 G = 2;
 	int32 B = 3;
-}
-message EntityData {
-	string Id = 1;
-	string Type = 2;
-	Color Color = 3;
 }
 // id = 3
 message SpawnRequest {
@@ -43,17 +41,15 @@ message ConnectResponse {
 	string SessionId = 2;
 }
 // id = 5
-message SessionDataRequest {
+message ConnectToSessionRequest {
 	string SessionId = 1;
 	string Id = 2;
 	PlayerData PlayerData = 3;
 }
 // id = 6
-message SessionDataResponse {
-	repeated EntityData entitiesData = 1;
-	repeated PlayerData playersData = 2;
-	repeated EntityUpdatedState lastActualStates = 3;
-	Rules Rules = 4;
+message ConnectToSessionResponse {
+	int32 Count = 1;
+	Rules Rules = 2;
 }
 message Rules {
 	float Speed = 1;
@@ -71,8 +67,14 @@ message Rules {
     int32 SpikesCount = 13;
     int32 FoodCount = 14;
     bool FoodEnabled = 15;
+	int32 MaxEntities = 16;
 }
 // id = 7
 message HeartBeatMessage {
 	// empty
+}
+
+// id = 8
+message NewPlayerConnected {
+	PlayerData playerData = 1;
 }

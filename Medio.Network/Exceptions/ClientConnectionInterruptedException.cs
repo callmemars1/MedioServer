@@ -1,6 +1,6 @@
 ﻿using Medio.Network.Clients;
 
-namespace Medio.PvPSession.Exceptions;
+namespace Medio.Network.Exceptions;
 
 public class ClientConnectionInterruptedException : Exception
 {

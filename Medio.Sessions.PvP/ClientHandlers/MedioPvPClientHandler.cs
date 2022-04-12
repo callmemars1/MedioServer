@@ -1,9 +1,11 @@
-﻿using Medio.Network.Clients;
+﻿using Medio.Network.ClientHandlers;
+using Medio.Network.Clients;
+using Medio.Network.Exceptions;
 using Medio.Proto;
-using Medio.PvPSession.Exceptions;
-using Medio.Session.Client.MessageHandlers;
+using Medio.Proto.MessageHandlers;
+using System.Collections.Concurrent;
 
-namespace Medio.Network.ClientHandlers;
+namespace Medio.Sessions.PvP.ClientHandlers;
 
 public class MedioPvPClientHandler : ClientHandler
 {
@@ -38,8 +40,8 @@ public class MedioPvPClientHandler : ClientHandler
                 var fullMsgBytes = new byte[msgSize];
                 msgSizeBytes.CopyTo(fullMsgBytes.AsSpan(0, ByteArr.SizeBytesCount));
                 msgBytes.CopyTo(fullMsgBytes.AsSpan(ByteArr.SizeBytesCount, msgSize - ByteArr.SizeBytesCount));
-                Task.Run(() => 
-                { 
+                Task.Run(() =>
+                {
                     _handlerManager.Handle(fullMsgBytes);
                 });
             }
@@ -49,6 +51,7 @@ public class MedioPvPClientHandler : ClientHandler
             _handle = false;
             Client.Close();
             StopHandle();
+
             throw new ClientConnectionInterruptedException(Client, "beda");
         }
     }
