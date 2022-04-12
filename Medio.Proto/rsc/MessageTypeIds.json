@@ -1,9 +1,12 @@
 {
   "MoveRequest": 1,
   "EntityUpdatedState": 2,
-  "SpawnRequest": 3,
-  "ConnectResponse": 4,
-  "SessionDataRequest": 5,
-  "SessionDataResponse": 6,
-  "HeartBeatMessage": 7
+  "PlayerData": 3,
+  "FoodData": 4,
+  "SpawnRequest": 5,
+  "ConnectResponse": 6,
+  "ConnectToSessionRequest": 7,
+  "ConnectToSessionResponse": 8,
+  "HeartBeatMessage": 9,
+  "NewPlayerConnected": 10
 }

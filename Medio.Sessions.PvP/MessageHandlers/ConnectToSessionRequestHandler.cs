@@ -13,7 +13,7 @@ public class ConnectToSessionRequestHandler : MessageHandlerBase<ConnectToSessio
     private readonly ClientPool _clientPool;
     private readonly Map _map;
 
-    public ConnectToSessionRequestHandler(Session session, ClientPool clientPool, Map map)
+    public ConnectToSessionRequestHandler(ClientPool clientPool, Map map)
     {
         _clientPool = clientPool;
         _map = map;
@@ -24,6 +24,9 @@ public class ConnectToSessionRequestHandler : MessageHandlerBase<ConnectToSessio
         _map.TryAddEntity(player);
         foreach (var client in _clientPool.Clients.Values)
         {
+            if (client.Id == message.Id)
+                continue;
+
             var msg = new NewPlayerConnected() { PlayerData = message.PlayerData };
             client.Send(new ByteArr(msg).ToByteArray());
         }

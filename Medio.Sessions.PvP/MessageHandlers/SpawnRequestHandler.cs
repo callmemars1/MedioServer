@@ -1,6 +1,7 @@
 ﻿using Medio.Domain;
 using Medio.Domain.Entities;
 using Medio.Domain.Utilities;
+using Medio.Network.ClientPools;
 using Medio.Proto.Exceptions;
 using Medio.Proto.MessageHandlers;
 using Medio.Proto.Messages;
@@ -9,10 +10,12 @@ namespace Medio.Sessions.PvP.MessageHandlers;
 
 public class SpawnRequestHandler : MessageHandlerBase<SpawnRequest>
 {
+    private readonly ClientPool _clientPool;
     private readonly Map _map;
 
-    public SpawnRequestHandler(Map map)
+    public SpawnRequestHandler(ClientPool clientPool, Map map)
     {
+        _clientPool = clientPool;
         _map = map;
     }
 

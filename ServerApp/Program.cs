@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using CommandLine;
-using Medio.Network;
+﻿using CommandLine;
 using Medio.Sessions.PvP;
 using NLog;
 using NLog.Config;

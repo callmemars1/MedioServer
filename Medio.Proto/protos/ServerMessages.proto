@@ -17,11 +17,13 @@ message EntityUpdatedState {
 	Pos Pos = 2;
 	string Id = 3;
 }
+// id = 3
 message PlayerData {
 	string Id = 1;
 	string Name = 2;
 	Color Color = 4;
 }
+// id = 4
 message FoodData {
 	string Id = 1;
 	Color Color = 2;
@@ -31,22 +33,22 @@ message Color {
 	int32 G = 2;
 	int32 B = 3;
 }
-// id = 3
+// id = 5
 message SpawnRequest {
 	string Id = 1;
 }
-// id = 4
+// id = 6
 message ConnectResponse {
 	string Id = 1;
 	string SessionId = 2;
 }
-// id = 5
+// id = 7
 message ConnectToSessionRequest {
 	string SessionId = 1;
 	string Id = 2;
 	PlayerData PlayerData = 3;
 }
-// id = 6
+// id = 8
 message ConnectToSessionResponse {
 	int32 Count = 1;
 	Rules Rules = 2;
@@ -69,9 +71,9 @@ message Rules {
     bool FoodEnabled = 15;
 	int32 MaxEntities = 16;
 }
-// id = 7
+// id = 9
 message HeartBeatMessage {
-	// empty
+	string Id = 1;
 }
 
 // id = 8

@@ -4,15 +4,18 @@ using Medio.Domain.Entities;
 using Medio.Proto.MessageHandlers;
 using Medio.Proto.Exceptions;
 using Medio.Proto;
+using Medio.Network.ClientPools;
 
 namespace Medio.Sessions.PvP.MessageHandlers;
 
 public class MoveRequestHandler : MessageHandlerBase<MoveRequest>
 {
+    private readonly ClientPool _clientPool;
     private readonly Map _map;
 
-    public MoveRequestHandler(Map map)
+    public MoveRequestHandler(ClientPool clientPool, Map map)
     {
+        _clientPool = clientPool;
         _map = map;
     }
     protected override void Process(MoveRequest message)
@@ -43,7 +46,7 @@ public class MoveRequestHandler : MessageHandlerBase<MoveRequest>
         }
 
 #pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
-        _map.UpdateEntityState(message.Id, newState);
+        _map.TryUpdateEntityState(message.Id, newState);
 #pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
     }
 }
