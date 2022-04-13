@@ -1,6 +1,7 @@
 ﻿using Medio.Network.ClientAcceptors;
 using Medio.Network.ClientHandlers;
 using Medio.Network.ClientPools;
+using NLog;
 
 namespace Medio.Network;
 
@@ -10,6 +11,7 @@ public class Session
     protected readonly ClientPool _clientPool;
     protected readonly ClientHandlerPool _handlerPool;
     protected readonly IClientHandlerCreator _handlerCreator;
+    protected readonly ILogger? _logger;
 
     public Session(
         IClientAcceptor acceptor,
@@ -18,6 +20,7 @@ public class Session
         IClientHandlerCreator handlerCreator
         )
     {
+        _logger = LogManager.GetCurrentClassLogger();
         _acceptor = acceptor;
         _clientPool = clientPool;
         _handlerPool = handlerPool;
@@ -41,13 +44,20 @@ public class Session
 
     protected virtual void Listen()
     {
-        _acceptor.Start();
-        while (true)
+        try
         {
-            var client = _acceptor.Accept();
-            var clientHandler = _handlerCreator.Create(client);
-            _clientPool.Add(client.Id, client);
-            _handlerPool.Add(clientHandler.Client.Id, clientHandler);
+            _acceptor.Start();
+            while (true)
+            {
+                var client = _acceptor.Accept();
+                var clientHandler = _handlerCreator.Create(client);
+                _clientPool.Add(client.Id, client);
+                _handlerPool.Add(clientHandler.Client.Id, clientHandler);
+            }
+        }
+        catch (Exception ex) 
+        {
+            _logger?.Error(ex);
         }
     }
 
