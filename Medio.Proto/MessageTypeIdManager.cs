@@ -7,7 +7,7 @@ public class MessageTypeIdManager
 {
     static MessageTypeIdManager()
     {
-        string contents = File.ReadAllText(@"MessageTypeIds.json");
+        string contents = File.ReadAllText(@"rsc\MessageTypeIds.json");
         _ids = JObject.Parse(contents);
     }
     private static readonly JObject _ids;

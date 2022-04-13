@@ -3,6 +3,7 @@ using Medio.Network.Clients;
 using Medio.Network.Exceptions;
 using Medio.Proto;
 using Medio.Proto.MessageHandlers;
+using NLog;
 using System.Collections.Concurrent;
 
 namespace Medio.Sessions.PvP.ClientHandlers;
@@ -12,8 +13,10 @@ public class MedioPvPClientHandler : ClientHandler
     private readonly MessageHandlerManager _handlerManager;
     private readonly CancellationTokenSource _ctSource = new CancellationTokenSource();
     bool _handle = false;
+    ILogger? _logger;
     public MedioPvPClientHandler(Client client, MessageHandlerManager handlerManager) : base(client)
     {
+        _logger = LogManager.GetCurrentClassLogger();
         _handlerManager = handlerManager;
     }
 
@@ -31,7 +34,7 @@ public class MedioPvPClientHandler : ClientHandler
 
             var token = _ctSource.Token;
             _handle = true;
-            while (token.IsCancellationRequested == false)
+            while (token.IsCancellationRequested == false && Client.Connected == true)
             {
                 var msgSizeBytes = Client.Receive(ByteArr.SizeBytesCount); // read size part of header
                 var msgSize = BitConverter.ToInt32(msgSizeBytes); // get int from readed bytes
@@ -46,19 +49,25 @@ public class MedioPvPClientHandler : ClientHandler
                 });
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            _handle = false;
-            Client.Close();
+            _logger?.Error(ex.Message);
             StopHandle();
-
             throw new ClientConnectionInterruptedException(Client, "beda");
+        }
+        finally
+        {
+            StopHandle();
         }
     }
 
     public override void StopHandle()
     {
+        if (_handle == false)
+            return;
+
         _handle = false;
         _ctSource.Cancel();
+        _logger?.Info($"{Client.Id}: handler stopped");
     }
 }

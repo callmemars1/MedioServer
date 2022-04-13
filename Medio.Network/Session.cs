@@ -47,7 +47,7 @@ public class Session
         try
         {
             _acceptor.Start();
-            while (true)
+            while (true) 
             {
                 var client = _acceptor.Accept();
                 var clientHandler = _handlerCreator.Create(client);

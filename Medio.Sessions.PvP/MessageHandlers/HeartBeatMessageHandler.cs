@@ -32,7 +32,6 @@ public class HeartBeatMessageHandler : MessageHandlerBase<HeartBeatMessage>
                 if (diff.Ticks >= TimeSpan.FromSeconds(_period).Ticks)
                     _clientPool.Remove(message.Id);
 
-
             }, null, 0, 5_000);
         }
     }

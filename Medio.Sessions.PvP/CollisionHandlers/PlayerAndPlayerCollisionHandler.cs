@@ -2,14 +2,17 @@
 using Medio.Domain.Entities;
 using Medio.Domain.EntityCollisionHandlers;
 using Medio.Network.ClientPools;
+using NLog;
 
 namespace Medio.Sessions.PvP.CollisionHandlers;
 
 public class PlayerAndPlayerCollisionHandler : EntityCollisionHandlerBase<Player, Player>
 {
     Map _map;
+    ILogger? _logger;
     public PlayerAndPlayerCollisionHandler(Map map)
     {
+        _logger = LogManager.GetCurrentClassLogger();
         _map = map;
     }
     protected override IReadOnlyCollection<IReadOnlyEntity> HandleCollision(Player entity, Player collider)
@@ -23,6 +26,7 @@ public class PlayerAndPlayerCollisionHandler : EntityCollisionHandlerBase<Player
                 entity.Pos.X = -1;
                 entity.Points = 0;
                 entity.Pos.Y = -1;
+                _logger?.Info($"{collider.Name} eated {entity.Name}");
                 return new List<IReadOnlyEntity>() { entity, collider };
             }
 
@@ -30,6 +34,7 @@ public class PlayerAndPlayerCollisionHandler : EntityCollisionHandlerBase<Player
         collider.Points = 0;
         collider.Pos.X = -1;
         collider.Pos.Y = -1;
+        _logger?.Info($"{entity.Name} eated {collider.Name}");
         return new List<IReadOnlyEntity>() { entity, collider };
     }
 }
