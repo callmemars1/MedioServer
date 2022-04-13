@@ -15,7 +15,16 @@ public class PlayerAndPlayerCollisionHandler : EntityCollisionHandlerBase<Player
     protected override IReadOnlyCollection<IReadOnlyEntity> HandleCollision(Player entity, Player collider)
     {
         if (entity.Points / (float)collider.Points < _map.Rules.CanEatSizeDifference)
-            return new List<IReadOnlyEntity>();
+            if (collider.Points / (float)entity.Points < _map.Rules.CanEatSizeDifference)
+                return new List<IReadOnlyEntity>();
+            else 
+            {
+                collider.Points += entity.Points;
+                entity.Pos.X = -1;
+                entity.Points = 0;
+                entity.Pos.Y = -1;
+                return new List<IReadOnlyEntity>() { entity, collider };
+            }
 
         entity.Points += collider.Points;
         collider.Points = 0;
