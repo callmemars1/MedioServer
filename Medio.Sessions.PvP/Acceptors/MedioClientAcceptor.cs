@@ -5,6 +5,8 @@ using CSharpVitamins;
 using Medio.Network.ClientAcceptors;
 using Medio.Sessions.PvP.Clients;
 using NLog;
+using Medio.Proto.Messages;
+using Medio.Proto;
 
 namespace Medio.Sessions.PvP.Acceptors;
 
@@ -26,13 +28,14 @@ public class MedioClientAcceptor : IClientAcceptor
         var id = ShortGuid.NewGuid();
         logger?.Info($"New client with id: {id} and ip: {client.Client.RemoteEndPoint}");
         // тут был возврат id клиенту
+        var msg = new ConnectResponse() 
+        {
+            Id = id,
+            SessionId = "lox228"
+        };
+        client.GetStream().Write(new ByteArr(msg).ToByteArray());
         return new MedioTcpClient(id, client.Client.RemoteEndPoint as IPEndPoint
                                                   ?? throw new ArgumentNullException("wtf"), client);
-    }
-
-    bool Validate(TcpClient client) 
-    {
-        return false;
     }
 
     public void Start()

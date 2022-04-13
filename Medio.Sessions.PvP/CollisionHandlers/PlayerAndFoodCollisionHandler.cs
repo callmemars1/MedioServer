@@ -20,6 +20,6 @@ public class PlayerAndFoodCollisionHandler : EntityCollisionHandlerBase<Player, 
         collider.Points = 0;
         collider.Pos.X = -1;
         collider.Pos.Y = -1;
-        return new List<IReadOnlyEntity>() { entity, collider };////////////////////////////////////
+        return new List<IReadOnlyEntity>() { entity, collider };
     }
 }
