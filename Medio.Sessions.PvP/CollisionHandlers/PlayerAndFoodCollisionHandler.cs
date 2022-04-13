@@ -11,14 +11,15 @@ public class PlayerAndFoodCollisionHandler : EntityCollisionHandlerBase<Player, 
     {
         _map = map;
     }
-    protected override void HandleCollision(Player entity, Food collider)
+    protected override IReadOnlyCollection<IReadOnlyEntity> HandleCollision(Player entity, Food collider)
     {
         if (entity.Points / (float)collider.Points < _map.Rules.CanEatSizeDifference)
-            return;
+            return new List<IReadOnlyEntity>();
 
         entity.Points += collider.Points;
         collider.Points = 0;
         collider.Pos.X = -1;
         collider.Pos.Y = -1;
+        return new List<IReadOnlyEntity>() { entity, collider };////////////////////////////////////
     }
 }

@@ -15,13 +15,13 @@ public class EntityCollisionHandlerManager
 {
     private readonly Dictionary<Pair<Type, Type>, IEntityCollisionHandler> _handlers = new();
 
-    public void Handle<TEntity, TCollider>(TEntity entity, TCollider collider)
+    public IReadOnlyCollection<IReadOnlyEntity> Handle<TEntity, TCollider>(TEntity entity, TCollider collider)
         where TEntity : class, IReadOnlyEntity
         where TCollider : class, IReadOnlyEntity
     {
         // Получаем хендлер для реальных переданных типов
         var handler = GetHandler(entity.GetType(), collider.GetType());
-        handler.Handle(entity, collider);
+        return handler.Handle(entity, collider);
     }
 
     private IEntityCollisionHandler GetHandler(Type entityType, Type colliderType)

@@ -30,6 +30,7 @@ public class ClientHandlerPool : Pool<ShortGuid, ClientHandler>
             return;
 
         _values.TryAdd(key, value);
+        OnAdd?.Invoke(value.Client);
 
         Task.Run(() =>
         {
@@ -50,6 +51,9 @@ public class ClientHandlerPool : Pool<ShortGuid, ClientHandler>
             return;
 
         _values.TryRemove(key, out var handler);
+#pragma warning disable CS8602 // Разыменование вероятной пустой ссылки.
+        OnRemove?.Invoke(handler.Client);
+#pragma warning restore CS8602 // Разыменование вероятной пустой ссылки.
         handler?.StopHandle();
     }
     public void StopAll()

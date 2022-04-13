@@ -52,7 +52,7 @@ public abstract class Map
     }
 
     // Проверят возможность изменения состояния
-    public abstract bool TryUpdateEntityState(ShortGuid entityId, Entity newState);
+    public abstract IReadOnlyCollection<IReadOnlyEntity> TryUpdateEntityState(ShortGuid entityId, Entity newState);
     // Ничего не проверяет
     public abstract void ExplicitUpdateEntityState(ShortGuid entityId, Entity newState);
 }

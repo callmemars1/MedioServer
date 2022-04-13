@@ -10,9 +10,7 @@ class Server
 {
     static async Task Main(string[] args)
     {
-        // merge
         _ = await Parser.Default.ParseArguments<RunArgs>(args).WithParsedAsync(StartUp);
-
     }
     static async Task StartUp(RunArgs args)
     {
