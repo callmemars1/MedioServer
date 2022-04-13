@@ -4,7 +4,7 @@ using CSharpVitamins;
 
 namespace Medio.Domain.Entities;
 
-public class Player : Entity, IPlayer
+public class Player : Entity, IPlayer, IPoints
 {
 
     private int _points;

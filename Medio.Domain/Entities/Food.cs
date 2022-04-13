@@ -4,7 +4,7 @@ using CSharpVitamins;
 
 namespace Medio.Domain.Entities;
 
-public class Food : Entity, IFood
+public class Food : Entity, IFood, IPoints
 {
     private int _points;
     private Color _color;

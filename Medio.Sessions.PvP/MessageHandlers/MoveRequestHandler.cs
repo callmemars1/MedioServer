@@ -26,7 +26,7 @@ public class MoveRequestHandler : MessageHandlerBase<MoveRequest>
         var entity = _map.Entities[message.Id];
         Entity? newState = null;
 
-        if (entity is Food food) 
+        if (entity is Food food)
         {
             newState = new Food(food.Id, food.SizeIncreaseCoefficient)
             {
@@ -35,9 +35,9 @@ public class MoveRequestHandler : MessageHandlerBase<MoveRequest>
             ((Food)newState).Color = food.Color;
             message.Pos.Map(out ((Food)newState).Pos);
         }
-        else if (entity is Player player) 
+        else if (entity is Player player)
         {
-            newState = new Player(player.Id, player.SizeIncreaseCoefficient) 
+            newState = new Player(player.Id, player.SizeIncreaseCoefficient)
             {
                 Name = player.Name,
             };
@@ -46,7 +46,26 @@ public class MoveRequestHandler : MessageHandlerBase<MoveRequest>
         }
 
 #pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
-        _map.TryUpdateEntityState(message.Id, newState);
+        var changedEntities = _map.TryUpdateEntityState(message.Id, newState);
 #pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
+        // рассылка
+        foreach (var client in _clientPool.Clients.Values)
+        {
+            foreach (var changedEntity in changedEntities)
+            {
+                changedEntity.Pos.Map(out var pos);
+                int points = 0;
+                if (changedEntity is IPoints entityWithPoints)
+                    points = entityWithPoints.Points;
+
+                var msg = new EntityUpdatedState()
+                {
+                    Id = changedEntity.Id,
+                    Pos = pos,
+                    Points = points
+                };
+                client.Send(new ByteArr(msg).ToByteArray());
+            }
+        }
     }
 }

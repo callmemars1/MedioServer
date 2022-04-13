@@ -2,6 +2,7 @@
 using Medio.Domain.Entities;
 using Medio.Domain.Utilities;
 using Medio.Network.ClientPools;
+using Medio.Proto;
 using Medio.Proto.Exceptions;
 using Medio.Proto.MessageHandlers;
 using Medio.Proto.Messages;
@@ -42,5 +43,22 @@ public class SpawnRequestHandler : MessageHandlerBase<SpawnRequest>
         };
         entity.Points = rnd.Next(_map.Rules.MinPlayerSize, _map.Rules.MaxPlayerSpawnSize);
         _map.ExplicitUpdateEntityState(entity.Id, entity);
+
+        var changedEntity = _map.Entities[entity.Id];
+        foreach (var client in _clientPool.Clients.Values)
+        {
+                changedEntity.Pos.Map(out var pos);
+                int points = 0;
+                if (changedEntity is IPoints entityWithPoints)
+                    points = entityWithPoints.Points;
+
+                var msg = new EntityUpdatedState()
+                {
+                    Id = changedEntity.Id,
+                    Pos = pos,
+                    Points = points
+                };
+                client.Send(new ByteArr(msg).ToByteArray());
+        }
     }
 }
