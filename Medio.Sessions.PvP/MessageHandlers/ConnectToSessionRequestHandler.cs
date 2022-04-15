@@ -5,6 +5,7 @@ using Medio.Network.ClientPools;
 using Medio.Proto;
 using Medio.Proto.MessageHandlers;
 using Medio.Proto.Messages;
+using NLog;
 
 namespace Medio.Sessions.PvP.MessageHandlers;
 
@@ -12,14 +13,17 @@ public class ConnectToSessionRequestHandler : MessageHandlerBase<ConnectToSessio
 {
     private readonly ClientPool _clientPool;
     private readonly Map _map;
+    private ILogger? _logger;
 
     public ConnectToSessionRequestHandler(ClientPool clientPool, Map map)
     {
         _clientPool = clientPool;
         _map = map;
+        _logger = LogManager.GetCurrentClassLogger();
     }
     protected override void Process(ConnectToSessionRequest message)
     {
+        _logger?.Info("Processing....");
         message.PlayerData.Map(out var player, _map.Rules.SizeIncreaseCoefficient);
         _map.TryAddEntity(player);
         foreach (var client in _clientPool.Clients.Values)

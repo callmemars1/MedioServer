@@ -3,6 +3,7 @@ using Medio.Network.Clients;
 using Medio.Proto.Exceptions;
 using Medio.Proto.MessageHandlers;
 using Medio.Proto.Messages;
+using NLog;
 
 namespace Medio.Sessions.PvP.MessageHandlers;
 
@@ -11,6 +12,7 @@ public class HeartBeatMessageHandler : MessageHandlerBase<HeartBeatMessage>
     private readonly ClientPool _clientPool;
     TimeOnly _lastHeartBeatMessage = TimeOnly.FromDateTime(DateTime.Now);
     Timer? _timer;
+    ILogger? _logger;
     public HeartBeatMessageHandler(ClientPool clientPool, int period, Client client)
     {
         _clientPool = clientPool;
@@ -29,5 +31,6 @@ public class HeartBeatMessageHandler : MessageHandlerBase<HeartBeatMessage>
             throw new InvalidRequestException(message, "wrong id");
 
         _lastHeartBeatMessage = TimeOnly.FromDateTime(DateTime.Now);
+        _logger?.Info("HeartBeat");
     }
 }

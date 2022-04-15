@@ -5,6 +5,7 @@ using Medio.Proto.MessageHandlers;
 using Medio.Proto.Exceptions;
 using Medio.Proto;
 using Medio.Network.ClientPools;
+using NLog;
 
 namespace Medio.Sessions.PvP.MessageHandlers;
 
@@ -12,14 +13,17 @@ public class MoveRequestHandler : MessageHandlerBase<MoveRequest>
 {
     private readonly ClientPool _clientPool;
     private readonly Map _map;
+    private ILogger? _logger;
 
     public MoveRequestHandler(ClientPool clientPool, Map map)
     {
         _clientPool = clientPool;
         _map = map;
+        _logger = LogManager.GetCurrentClassLogger();
     }
     protected override void Process(MoveRequest message)
     {
+        _logger.Info("Processing....");
         if (_map.Entities.ContainsKey(message.Id) == false)
             throw new InvalidRequestException(message, "no player with id");
 

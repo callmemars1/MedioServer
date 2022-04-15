@@ -6,6 +6,7 @@ using Medio.Proto;
 using Medio.Proto.Exceptions;
 using Medio.Proto.MessageHandlers;
 using Medio.Proto.Messages;
+using NLog;
 
 namespace Medio.Sessions.PvP.MessageHandlers;
 
@@ -13,15 +14,18 @@ public class SpawnRequestHandler : MessageHandlerBase<SpawnRequest>
 {
     private readonly ClientPool _clientPool;
     private readonly Map _map;
+    private ILogger? _logger;
 
     public SpawnRequestHandler(ClientPool clientPool, Map map)
     {
         _clientPool = clientPool;
         _map = map;
+        _logger = LogManager.GetCurrentClassLogger();
     }
 
     protected override void Process(SpawnRequest message)
     {
+        _logger?.Info("Processing...");
         if (_map.Entities.ContainsKey(message.Id) == false)
             return;
 
