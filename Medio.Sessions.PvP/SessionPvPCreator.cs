@@ -1,6 +1,7 @@
 ﻿using Medio.Domain.EntityCollisionHandlers;
 using Medio.Network;
 using Medio.Network.ClientPools;
+using Medio.Proto.MessageHandlers;
 using Medio.Sessions.PvP.Acceptors;
 using Medio.Sessions.PvP.ClientHandlers;
 using Medio.Sessions.PvP.CollisionHandlers;
