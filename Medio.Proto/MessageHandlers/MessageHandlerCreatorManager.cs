@@ -2,7 +2,7 @@
 using Medio.Network.MessageHandlers;
 using Medio.Proto.MessageHandlers;
 
-namespace Medio.Sessions.PvP.MessageHandlerCreators;
+namespace Medio.Proto.MessageHandlers;
 
 public class MessageHandlerCreatorManager
 {
