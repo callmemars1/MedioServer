@@ -30,7 +30,7 @@ public class ConnectToSessionRequestHandler : MessageHandlerBase<ConnectToSessio
             if (client.Id == message.Id)
                 continue;
 
-            var msg = new NewPlayerConnected() { PlayerData = message.PlayerData };
+            var msg = message.PlayerData;
             client.Send(new ByteArr(msg).ToByteArray());
         }
         // session data message
@@ -44,8 +44,11 @@ public class ConnectToSessionRequestHandler : MessageHandlerBase<ConnectToSessio
         newClient.Send(new ByteArr(response).ToByteArray());
         foreach (var entity in _map.Entities.Values)
         {
+            var points = 0;
+            entity.Pos.Map(out var pos);
             if (entity is Food foodEntity)
             {
+                points = foodEntity.Points;
                 foodEntity.Color.Map(out var color);
                 var foodData = new FoodData()
                 {
@@ -56,6 +59,7 @@ public class ConnectToSessionRequestHandler : MessageHandlerBase<ConnectToSessio
             }
             else if (entity is Player playerEntity)
             {
+                points = playerEntity.Points;
                 playerEntity.Color.Map(out var color);
                 var playerData = new PlayerData()
                 {
@@ -65,6 +69,13 @@ public class ConnectToSessionRequestHandler : MessageHandlerBase<ConnectToSessio
                 };
                 newClient.Send(new ByteArr(playerData).ToByteArray());
             }
+            var state = new EntityUpdatedState()
+            {
+                Id = entity.Id,
+                Points = points,
+                Pos = pos
+            };
+            newClient.Send(new ByteArr(state).ToByteArray());
         }
         _map.TryAddEntity(player);
     }
