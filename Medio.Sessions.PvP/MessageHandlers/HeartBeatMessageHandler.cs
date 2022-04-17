@@ -15,6 +15,7 @@ public class HeartBeatMessageHandler : MessageHandlerBase<HeartBeatMessage>
     ILogger? _logger;
     public HeartBeatMessageHandler(ClientPool clientPool, int period, Client client)
     {
+        _logger = LogManager.GetCurrentClassLogger();
         _clientPool = clientPool;
         _timer = new((o) =>
         {
@@ -23,6 +24,7 @@ public class HeartBeatMessageHandler : MessageHandlerBase<HeartBeatMessage>
                 _clientPool.Remove(client.Id);
 
         }, null, 0, 5_000);
+
     }
 
     protected override void Process(HeartBeatMessage message)

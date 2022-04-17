@@ -1,4 +1,8 @@
-﻿using Medio.Domain.EntityCollisionHandlers;
+﻿using CSharpVitamins;
+using Medio.Domain;
+using Medio.Domain.Entities;
+using Medio.Domain.EntityCollisionHandlers;
+using Medio.Domain.Utilities;
 using Medio.Network;
 using Medio.Network.ClientPools;
 using Medio.Proto.MessageHandlers;
@@ -34,6 +38,7 @@ public class SessionPvPCreator : ISessionCreator
         messageHandlerCreatorManager.RegisterCreator(new HeartBeatMessageHandlerCreator(clientPool, 20));
         messageHandlerCreatorManager.RegisterCreator(new MoveRequestHandlerCreator(clientPool, map));
         messageHandlerCreatorManager.RegisterCreator(new SpawnRequestHandlerCreator(clientPool, map));
+        GenerateEntities(map);
         var session = new SessionPvP(
             acceptor,
             clientPool,
@@ -41,5 +46,19 @@ public class SessionPvPCreator : ISessionCreator
             handlerCreator
             );
         return session;
+    }
+
+    private void GenerateEntities(Map map) 
+    {
+        var rnd = new Random();
+        foreach (var i in Enumerable.Range(0, map.Rules.FoodCount)) 
+        {
+            var food = new Food(ShortGuid.NewGuid(), map.Rules.SizeIncreaseCoefficient)
+            {
+                Points = rnd.Next(map.Rules.MinEntitySpawnSize, map.Rules.MaxEntitySpawnSize)
+            };
+            food.Color = Colors.Green;
+            map.TryAddEntity(food);
+        }
     }
 }

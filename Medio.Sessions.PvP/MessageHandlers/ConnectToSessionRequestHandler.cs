@@ -25,7 +25,6 @@ public class ConnectToSessionRequestHandler : MessageHandlerBase<ConnectToSessio
     {
         _logger?.Info("Processing....");
         message.PlayerData.Map(out var player, _map.Rules.SizeIncreaseCoefficient);
-        _map.TryAddEntity(player);
         foreach (var client in _clientPool.Clients.Values)
         {
             if (client.Id == message.Id)
@@ -67,5 +66,6 @@ public class ConnectToSessionRequestHandler : MessageHandlerBase<ConnectToSessio
                 newClient.Send(new ByteArr(playerData).ToByteArray());
             }
         }
+        _map.TryAddEntity(player);
     }
 }

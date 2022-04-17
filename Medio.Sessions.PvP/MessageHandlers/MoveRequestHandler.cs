@@ -23,7 +23,7 @@ public class MoveRequestHandler : MessageHandlerBase<MoveRequest>
     }
     protected override void Process(MoveRequest message)
     {
-        _logger.Info("Processing....");
+        _logger?.Info("Processing....");
         if (_map.Entities.ContainsKey(message.Id) == false)
             throw new InvalidRequestException(message, "no player with id");
 
@@ -53,6 +53,8 @@ public class MoveRequestHandler : MessageHandlerBase<MoveRequest>
         var changedEntities = _map.TryUpdateEntityState(message.Id, newState);
 #pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
         // рассылка
+        // переделать рассылку на игроков в сессии
+        // нет смысла отсылать данные игрокам в процессе подключения
         foreach (var client in _clientPool.Clients.Values)
         {
             foreach (var changedEntity in changedEntities)
