@@ -3,16 +3,32 @@ using Medio.Domain;
 using Medio.Domain.Entities;
 using Medio.Domain.EntityCollisionHandlers;
 using Medio.Domain.Utilities;
+using Medio.Proto.Messages;
 
 namespace Medio.Sessions.PvP;
 
 public class MapPvP : Map
 {
     private readonly EntityCollisionHandlerManager _collisionHandlers;
+    private readonly Timer _timer;
 
-    public MapPvP(Rules rules, EntityCollisionHandlerManager collisionHandlers) : base(rules)
+    public MapPvP(Domain.Rules rules, EntityCollisionHandlerManager collisionHandlers) : base(rules)
     {
         _collisionHandlers = collisionHandlers;
+        _timer = new((o) =>
+        {
+            foreach (var entity in _entities.Where((e) =>
+                {
+                    return e.Value is not Player && e.Value.Pos == new Vector2D { X = -1, Y = -1 } && e.Value is IPoints;
+                })
+            )
+            {
+                var rnd = new Random();
+                entity.Value.Pos = new Vector2D { X = (float)(rnd.NextDouble() * Rules.MapWidth), Y = (float)(rnd.NextDouble() * Rules.MapHeight) };
+                IPoints pointable = (IPoints)entity.Value;
+                pointable.Points = rnd.Next(Rules.MinEntitySpawnSize, Rules.MaxEntitySpawnSize);
+            }
+        }, null, 0, 5_000);
     }
 
     public override void ExplicitUpdateEntityState(ShortGuid entityId, Entity newState)

@@ -58,6 +58,11 @@ public class SessionPvPCreator : ISessionCreator
                 Points = rnd.Next(map.Rules.MinEntitySpawnSize, map.Rules.MaxEntitySpawnSize)
             };
             food.Color = Colors.Green;
+            food.Pos = new Vector2D 
+            { 
+                X = (float)(rnd.NextDouble() * map.Rules.MapWidth),
+                Y = (float)(rnd.NextDouble() * map.Rules.MapHeight) 
+            };
             map.TryAddEntity(food);
         }
     }

@@ -2,5 +2,5 @@
 
 public interface IPoints
 {
-    int Points { get; }
+    int Points { get; set; }
 }
