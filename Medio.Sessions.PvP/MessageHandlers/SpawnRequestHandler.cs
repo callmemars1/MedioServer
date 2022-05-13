@@ -29,8 +29,8 @@ public class SpawnRequestHandler : MessageHandlerBase<SpawnRequest>
         if (_map.Entities.ContainsKey(message.Id) == false)
             return;
 
-        if (_map.Entities[message.Id].Pos != new Vector2D { X = -1, Y = -1 })
-            return;
+        /*if (_map.Entities[message.Id].Pos != new Vector2D { X = -1, Y = -1 })
+            return;*/
 
         var previousStateEntity = _map.Entities[message.Id] as Player ?? throw new InvalidRequestException(message, "Cant spawn entity on request!");
         var entity = new Player(message.Id)
@@ -51,18 +51,19 @@ public class SpawnRequestHandler : MessageHandlerBase<SpawnRequest>
         var changedEntity = _map.Entities[entity.Id];
         foreach (var client in _clientPool.Clients.Values)
         {
-                changedEntity.Pos.Map(out var pos);
-                int points = 0;
-                if (changedEntity is IPoints entityWithPoints)
-                    points = entityWithPoints.Points;
+            changedEntity.Pos.Map(out var pos);
+            int points = 0;
+            if (changedEntity is IPoints entityWithPoints)
+                points = entityWithPoints.Points;
 
-                var msg = new EntityUpdatedState()
-                {
-                    Id = changedEntity.Id,
-                    Pos = pos,
-                    Points = points
-                };
-                client.Send(new ByteArr(msg).ToByteArray());
+            var msg = new EntityUpdatedState()
+            {
+                Id = changedEntity.Id,
+                Pos = pos,
+                Points = points
+            };
+            client.Send(new ByteArr(msg).ToByteArray());
+            Console.WriteLine($"Sended new state to: {client.Id}");
         }
     }
 }

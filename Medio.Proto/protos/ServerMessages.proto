@@ -76,7 +76,20 @@ message HeartBeatMessage {
 	string Id = 1;
 }
 
-// id = 8
+// id = 10
 message NewPlayerConnected {
 	PlayerData playerData = 1;
 }
+
+// id 11
+message MoveDeclined {
+	Pos actualPos = 1;
+	MoveErrorCode errorCode = 2;
+	enum MoveErrorCode 
+	{
+		UNDEFINED = 0;
+		NOT_A_PLAYER = 1;
+		POS_NOT_IN_RANGE = 2;
+	}
+}
+

@@ -23,60 +23,66 @@ public class ConnectToSessionRequestHandler : MessageHandlerBase<ConnectToSessio
     }
     protected override void Process(ConnectToSessionRequest message)
     {
-        _logger?.Info("Processing....");
-        message.PlayerData.Map(out var player, _map.Rules.SizeIncreaseCoefficient);
-        foreach (var client in _clientPool.Clients.Values)
+        try
         {
-            if (client.Id == message.Id)
-                continue;
-
-            var msg = message.PlayerData;
-            client.Send(new ByteArr(msg).ToByteArray());
-        }
-        // session data message
-        var newClient = _clientPool.Clients[message.Id];
-        _map.Rules.Map(out var rules);
-        var response = new ConnectToSessionResponse()
-        {
-            Count = _map.Entities.Count,
-            Rules = rules,
-        };
-        newClient.Send(new ByteArr(response).ToByteArray());
-        foreach (var entity in _map.Entities.Values)
-        {
-            var points = 0;
-            entity.Pos.Map(out var pos);
-            if (entity is Food foodEntity)
+            _logger?.Info($"Processing.... id: {message.Id}");
+            message.PlayerData.Map(out var player, _map.Rules.SizeIncreaseCoefficient);
+            foreach (var client in _map.Entities.Values.Where((e) => e is Player))
             {
-                points = foodEntity.Points;
-                foodEntity.Color.Map(out var color);
-                var foodData = new FoodData()
-                {
-                    Color = color,
-                    Id = foodEntity.Id
-                };
-                newClient.Send(new ByteArr(foodData).ToByteArray());
+                var msg = message.PlayerData;
+                if (_clientPool.Clients.TryGetValue(client.Id, out var findedClient))
+                    findedClient.Send(new ByteArr(msg).ToByteArray());
             }
-            else if (entity is Player playerEntity)
+            // session data message
+            var newClient = _clientPool.Clients[message.Id];
+            _map.Rules.Map(out var rules);
+            var response = new ConnectToSessionResponse()
             {
-                points = playerEntity.Points;
-                playerEntity.Color.Map(out var color);
-                var playerData = new PlayerData()
-                {
-                    Color = color,
-                    Name = playerEntity.Name,
-                    Id = playerEntity.Id
-                };
-                newClient.Send(new ByteArr(playerData).ToByteArray());
-            }
-            var state = new EntityUpdatedState()
-            {
-                Id = entity.Id,
-                Points = points,
-                Pos = pos
+                Count = _map.Entities.Count,
+                Rules = rules,
             };
-            newClient.Send(new ByteArr(state).ToByteArray());
+            newClient.Send(new ByteArr(response).ToByteArray());
+            foreach (var entity in _map.Entities.Values)
+            {
+                var points = 0;
+                entity.Pos.Map(out var pos);
+                if (entity is Food foodEntity)
+                {
+                    points = foodEntity.Points;
+                    foodEntity.Color.Map(out var color);
+                    var foodData = new FoodData()
+                    {
+                        Color = color,
+                        Id = foodEntity.Id
+                    };
+                    newClient.Send(new ByteArr(foodData).ToByteArray());
+                }
+                else if (entity is Player playerEntity)
+                {
+                    points = playerEntity.Points;
+                    playerEntity.Color.Map(out var color);
+                    var playerData = new PlayerData()
+                    {
+                        Color = color,
+                        Name = playerEntity.Name,
+                        Id = playerEntity.Id
+                    };
+                    newClient.Send(new ByteArr(playerData).ToByteArray());
+                }
+                var state = new EntityUpdatedState()
+                {
+                    Id = entity.Id,
+                    Points = points,
+                    Pos = pos
+                };
+                newClient.Send(new ByteArr(state).ToByteArray());
+            }
+            _map.TryAddEntity(player);
         }
-        _map.TryAddEntity(player);
+        catch (Exception ex) 
+        {
+            _logger?.Error(ex);
+            throw;
+        }
     }
 }

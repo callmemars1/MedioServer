@@ -23,8 +23,8 @@ public record Rules
     {
         return new Rules
         {
-            MapHeight = 500f,
-            MapWidth = 500f,
+            MapHeight = 40f,
+            MapWidth = 40f,
             MinEntitySpawnSize = 5,
             MaxEntitySpawnSize = 15,
             MinPlayerSize = 10,
@@ -36,8 +36,9 @@ public record Rules
             SizeIncreaseCoefficient = 1.2f,
             GameLength = int.MaxValue,
             SpikesCount = 0,
-            FoodCount = 1000,
-            MaxEntities = 1000 + 16
+            FoodCount = 100,
+            MaxEntities = 100 + 16,
+            MaxPlayerSize = int.MaxValue,
         };
     }
 }

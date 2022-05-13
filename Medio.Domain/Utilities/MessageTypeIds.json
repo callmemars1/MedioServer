@@ -8,6 +8,5 @@
   "ConnectToSessionRequest": 7,
   "ConnectToSessionResponse": 8,
   "HeartBeatMessage": 9,
-  "NewPlayerConnected": 10,
-  "MoveDeclined": 11
+  "NewPlayerConnected": 10
 }

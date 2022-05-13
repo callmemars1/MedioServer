@@ -55,7 +55,7 @@ public class MapPvP : Map
     public static bool InEntityRange(Vector2D pos, IReadOnlyEntity entity)
     {
         var range = Math.Sqrt(Math.Pow((entity.Pos.X - pos.X), 2) + Math.Pow((entity.Pos.Y - pos.Y), 2));
-        return entity.Radius > range;
+        return entity.Radius + 0.5f > range;
     }
     public bool CanMoveTo(IReadOnlyEntity entity, Vector2D pos)
     {

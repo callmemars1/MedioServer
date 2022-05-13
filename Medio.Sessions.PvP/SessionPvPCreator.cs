@@ -39,6 +39,8 @@ public class SessionPvPCreator : ISessionCreator
         messageHandlerCreatorManager.RegisterCreator(new MoveRequestHandlerCreator(clientPool, map));
         messageHandlerCreatorManager.RegisterCreator(new SpawnRequestHandlerCreator(clientPool, map));
         GenerateEntities(map);
+
+        clientPool.ItemRemoved += (key) => map.TryRemoveEntity(key);
         var session = new SessionPvP(
             acceptor,
             clientPool,

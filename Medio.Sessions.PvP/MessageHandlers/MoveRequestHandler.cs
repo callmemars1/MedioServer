@@ -30,16 +30,16 @@ public class MoveRequestHandler : MessageHandlerBase<MoveRequest>
         var entity = _map.Entities[message.Id];
         Entity? newState = null;
 
-        if (entity is Food food)
-        {
-            newState = new Food(food.Id, food.SizeIncreaseCoefficient)
-            {
-                Points = food.Points,
-            };
-            ((Food)newState).Color = food.Color;
-            message.Pos.Map(out ((Food)newState).Pos);
-        }
-        else if (entity is Player player)
+        /*        if (entity is Food food)
+                {
+                    newState = new Food(food.Id, food.SizeIncreaseCoefficient)
+                    {
+                        Points = food.Points,
+                    };
+                    ((Food)newState).Color = food.Color;
+                    message.Pos.Map(out ((Food)newState).Pos);
+                }*/
+        if (entity is Player player)
         {
             newState = new Player(player.Id, player.SizeIncreaseCoefficient)
             {
@@ -48,14 +48,35 @@ public class MoveRequestHandler : MessageHandlerBase<MoveRequest>
             ((Player)newState).Color = player.Color;
             message.Pos.Map(out ((Player)newState).Pos);
         }
+        else 
+        {
 
-#pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
-        var changedEntities = _map.TryUpdateEntityState(message.Id, newState);
-#pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
-        // рассылка
-        // переделать рассылку на игроков в сессии
-        // нет смысла отсылать данные игрокам в процессе подключения
-        foreach (var client in _clientPool.Clients.Values)
+            _map.Entities[message.Id].Pos.Map(out var pos);
+            _clientPool.Clients[message.Id].Send(new ByteArr(new MoveDeclined
+            {
+                ActualPos = pos,
+                ErrorCode = MoveDeclined.Types.MoveErrorCode.NotAPlayer
+
+            }).ToByteArray());
+            return;
+        }
+
+        var changedEntities = _map.TryUpdateEntityState(message.Id, newState!);
+
+        if (changedEntities.Count == 0) 
+        {
+            _map.Entities[message.Id].Pos.Map(out var pos);
+            _clientPool.Clients[message.Id].Send(new ByteArr(new MoveDeclined
+            {
+                ActualPos = pos,
+                ErrorCode = MoveDeclined.Types.MoveErrorCode.PosNotInRange
+
+            }).ToByteArray());
+            return;
+        }
+
+
+        foreach (var playerClient in _map.Entities.Values.Where((x) => x is Player))
         {
             foreach (var changedEntity in changedEntities)
             {
@@ -70,7 +91,7 @@ public class MoveRequestHandler : MessageHandlerBase<MoveRequest>
                     Pos = pos,
                     Points = points
                 };
-                client.Send(new ByteArr(msg).ToByteArray());
+                _clientPool.Clients[playerClient.Id].Send(new ByteArr(msg).ToByteArray());
             }
         }
     }

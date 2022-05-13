@@ -48,6 +48,7 @@ public abstract class Map
     {
         var result = _entities.TryRemove(id, out _);
         OnTryRemove?.Invoke(this, id, result);
+        if (result) Console.WriteLine("removed from map");
         return result;
     }
 

@@ -36,6 +36,5 @@ public class HeartBeatMessageHandler : MessageHandlerBase<HeartBeatMessage>
             throw new InvalidRequestException(message, "wrong id");
 
         _lastHeartBeatMessage = TimeOnly.FromDateTime(DateTime.Now);
-        //_logger?.Info("HeartBeat");
     }
 }
